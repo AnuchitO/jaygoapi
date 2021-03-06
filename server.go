@@ -11,7 +11,7 @@ import (
 
 type Todo struct {
 	ID     int    `json:"id"`
-	Title  string `json:"AAAAAAAAA"`
+	Title  string `json:"title"`
 	Status string `json:"status"`
 }
 
