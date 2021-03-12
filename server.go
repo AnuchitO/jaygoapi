@@ -24,6 +24,8 @@ func getTodosHandler(c echo.Context) error {
 	for _, item := range todos {
 		items = append(items, item)
 	}
+
+	items = append(items, &Todo{Title: os.Getenv("DATABASE_URL")})
 	return c.JSON(http.StatusOK, items)
 }
 
