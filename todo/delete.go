@@ -12,6 +12,16 @@ func DeleteTodosHandler(c echo.Context) error {
 	if err != nil {
 		return c.JSON(http.StatusBadRequest, err)
 	}
-	delete(todos, id)
+
+	db := Conn()
+	stmt, err := db.Prepare("DELETE FROM todos WHERE id = $1")
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
+	if _, err := stmt.Exec(id); err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
+
 	return c.JSON(http.StatusOK, "deleted todo.")
 }

@@ -12,10 +12,11 @@ func CreateTodosHandler(c echo.Context) error {
 		return c.JSON(http.StatusBadRequest, map[string]string{"error": err.Error()})
 	}
 
-	id := len(todos)
-	id++
-	t.ID = id
-	todos[t.ID] = &t
+	row := Conn().QueryRow("INSERT INTO todos (title, status) values ($1, $2)  RETURNING id", t.Title, t.Status)
+	err := row.Scan(&t.ID)
+	if err != nil {
+		return c.JSON(http.StatusInternalServerError, err.Error())
+	}
 
-	return c.JSON(http.StatusCreated, "created todo.")
+	return c.JSON(http.StatusCreated, t)
 }

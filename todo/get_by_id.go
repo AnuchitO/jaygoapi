@@ -1,24 +1,10 @@
 package todo
 
 import (
-	"database/sql"
-	"log"
 	"net/http"
-	"os"
 
 	"github.com/labstack/echo/v4"
-
-	_ "github.com/lib/pq"
 )
-
-func Conn() *sql.DB {
-	var err error
-	db, err := sql.Open("postgres", os.Getenv("DATABASE_URL"))
-	if err != nil {
-		log.Fatal("Connect to database error", err)
-	}
-	return db
-}
 
 func GetTodoByIdHandler(c echo.Context) error {
 	var id int
@@ -33,19 +19,14 @@ func GetTodoByIdHandler(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	rowId := 1
-	row := stmt.QueryRow(rowId)
-	var title, status string
+	row := stmt.QueryRow(id)
 
-	err = row.Scan(&title, &status)
+	t := Todo{}
+
+	err = row.Scan(&t.ID, &t.Title, &t.Status)
 	if err != nil {
 		return c.JSON(http.StatusInternalServerError, err)
 	}
 
-	t := Todo{
-		ID:     id,
-		Title:  title,
-		Status: status,
-	}
 	return c.JSON(http.StatusOK, t)
 }
