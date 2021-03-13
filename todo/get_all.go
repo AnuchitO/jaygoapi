@@ -8,7 +8,7 @@ import (
 )
 
 func GetTodosHandler(c echo.Context) error {
-	items := []*Todo{}
+	items := []Todo{}
 	stmt, err := Conn().Prepare("SELECT id, title, status FROM todos")
 	if err != nil {
 		log.Fatal("can't prepare query all todos statment", err)
@@ -19,7 +19,7 @@ func GetTodosHandler(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, err.Error())
 	}
 	for rows.Next() {
-		t := &Todo{}
+		t := Todo{}
 		err := rows.Scan(&t.ID, &t.Title, &t.Status)
 		if err != nil {
 			return c.JSON(http.StatusInternalServerError, err.Error())
