@@ -33,7 +33,7 @@ func main() {
 	e.GET("/todos/:id", todo.GetTodoByIdHandler)
 	e.POST("/todos", todo.CreateTodosHandler)
 	e.PUT("/todos/:id", todo.UpdateTodosHandler)
-	e.DELETE("todos/:id", todo.DeleteTodosHandler)
+	e.DELETE("/todos/:id", todo.DeleteTodosHandler)
 
 	port := os.Getenv("PORT")
 	log.Println("port:", port)
